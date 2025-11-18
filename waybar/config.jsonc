@@ -1,0 +1,126 @@
+{
+
+    "layer": "bottom", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    // "width": 1280, // Waybar width
+    // Choose the order of the modules
+    "modules-left": ["hyprland/workspaces", "custom/music"],
+    "modules-center": ["custom/distro"],
+    "modules-right": ["pulseaudio", "battery", "clock","tray", "custom/power"],
+    //"wlr/workspaces": {
+      //   "disable-scroll": true,
+       //  "sort-by-name": true,
+       //  "format": " {icon} ",
+       //  "format-icons": {
+         //    "default": "",
+         //},
+     //},
+
+    "hyprland/workspaces": {
+		  // "active-only":
+		  // "hide-active":
+		  // "all-outputs":
+		  "format": "{icon}",
+		  "format-icons": {
+			  "active": "",
+			  "default": ""
+		  },
+		  "persistent-workspaces": {
+			  "*": 5
+		  },
+		// "persistent-only":
+		// "show-special":
+		// "special-visible-only":
+		// "sort-by":
+		// "window-rewrite":
+		// "window-rewrite-default":
+		// "format-window-separator":
+		// "move-to-monitor":
+		// "ignore-workspaces":
+		  "on-scroll-up": "hyprctl dispatch workspace +1",
+		  "on-scroll-down": "hyprctl dispatch workspace -1",
+		  "cursor": true
+	  },
+
+    "custom/distro": {
+		  "format": "󰣇",
+		  "tooltip-format": "I use arch btw",
+      "on-click": "kitty bash -c 'fastfetch; exec bash'" 
+	  },
+
+    "tray": {
+        "icon-size": 21,
+        "spacing": 10
+    },
+    "custom/music": {
+        "format": "{}",
+        "escape": true,
+        "interval": 5,
+        "tooltip": false,
+        "exec": "playerctl metadata --format='{{ title }}'",
+        "on-click": "playerctl play-pause",
+        "max-length": 50
+    },
+    "clock": {
+        "timezone": "Europe/London",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "󰸗  {:%d/%m}",
+        "format": "⏳ {:%H:%M}"
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+		  // "bat":
+		  // "adapter":
+		  // "design-capacity":
+		  // "full-at":
+		  // "interval":
+		  "states": {
+			  "warning": 20,
+			  "critical": 10
+		  },
+		  "format": "{icon} {capacity}%",
+		  "format-time": "{H} hr {M} min",
+		  "format-icons": [
+			  "󰂎", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"
+		  ],
+		  "format-charging": "󰉁 {capacity}%",
+		  "min-length": 7,
+		  "max-length": 7,
+		  // "rotate":
+		  // "on-click":
+		  // "on-click-middle":
+		  // "on-click-right":
+		  // "on-scroll-up":
+		  // "on-scroll-down":
+		  // "smooth-scrolling-threshold":
+		  // "tooltip":
+		  "tooltip-format": "Battery will be empty in {time} (allegedly)",
+		  "tooltip-format-charging": "Charging: {time}",
+		  // "weighted-average":
+		  // "bat-compatibility":
+		  "events": {
+			  "on-discharging-warning": "notify-send 'Battery Low (20%)' -i 'battery-020'",
+			  "on-discharging-critical": "notify-send 'Battery Critical (10%)' -u critical -i 'battery-010'",
+			  "on-charging-100": "notify-send 'Battery Full (100%)' -i 'battery-100-charged'"
+		  }
+	  }, 
+
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{icon} {volume}%",
+        "format-muted": "",
+        "format-icons": {
+            "default": [" ", " ", "  "]
+        },
+        "on-click": "pavucontrol"
+    },
+    "custom/power": {
+        "tooltip-format": "Shut down Neptune?",
+        "on-click": "shutdown now",
+        "format": "⏻"
+    }
+}

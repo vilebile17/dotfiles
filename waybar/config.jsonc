@@ -103,8 +103,8 @@
 		  // "weighted-average":
 		  // "bat-compatibility":
 		  "events": {
-			  "on-discharging-warning": "notify-send 'Battery Low (20%)' -i 'battery-020'",
-			  "on-discharging-critical": "notify-send 'Blud needs to put the charger in...' -u critical -i 'battery-010'",
+			  "on-discharging-warning": "notify-send 'Battery Low (20%)' -i dialog-warning",
+			  "on-discharging-critical": "notify-send 'Blud needs to put the charger in... (10%)' -u critical -i dialog-warning",
 			  "on-charging-100": "notify-send 'Battery Full (100%)' -i 'battery-100-charged'"
 		  }
 	  }, 
@@ -116,7 +116,7 @@
         "format-icons": {
             "default": [" ", " ", "  "]
         },
-        "on-click": "pavucontrol"
+        "on-click": "amixer set Master toggle"
     },
     "custom/power": {
         "tooltip-format": "Shut down Neptune?",

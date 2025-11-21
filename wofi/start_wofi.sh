@@ -3,5 +3,5 @@
 if ! pgrep -x "wofi" >/dev/null; then
   wofi --show drun -I &
 else
-  echo "Wofi is already running."
+  killall wofi
 fi

@@ -222,6 +222,7 @@ scrollbar trough {
   background: #313244;
   border-radius: 12.6px;
   color: #cdd6f4;
+  margin-top: 15px;
 }
 
 .mpris-overlay {

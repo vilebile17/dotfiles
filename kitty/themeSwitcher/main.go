@@ -1,13 +1,10 @@
 package main
 
 import (
-	"bufio"
-	"bytes"
 	"fmt"
 	"log"
 	"os"
 	"os/exec"
-	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/fatih/color"
@@ -26,32 +23,14 @@ func initialModel() model {
 		log.Fatal(err)
 	}
 
-	allFiles, err := os.ReadDir(homeDir + "/.config/kitty")
+	configFileNames, err := getConfigFiles(homeDir)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	configFileNames := []string{}
-	for _, file := range allFiles {
-		hiddenFile := strings.HasPrefix(file.Name(), ".")
-		if file.Name() != "kitty.conf" && !hiddenFile && !file.IsDir() {
-			nameWithoutSuffix := strings.Split(file.Name(), ".")[0]
-			configFileNames = append(configFileNames, nameWithoutSuffix)
-		}
-	}
-
-	lines, err := OpenAndReadConfig(homeDir)
+	selected, err := findCurrentFileIndex(configFileNames, homeDir)
 	if err != nil {
 		log.Fatal(err)
-	}
-	filePathParts := strings.Split(lines[len(lines)-1], "/")
-	currentFile := filePathParts[len(filePathParts)-1]
-
-	selected := 0
-	for i, file := range configFileNames {
-		if file+".conf" == currentFile {
-			selected = i
-		}
 	}
 
 	return model{
@@ -70,92 +49,46 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	// Is it a key press?
 	case tea.KeyMsg:
-
-		// Cool, what was the actual key pressed?
 		switch msg.String() {
-
-		// These keys should exit the program.
 		case "ctrl+c", "q":
 			return m, tea.Quit
-
-		// The "up" and "k" keys move the cursor up
 		case "up", "k":
 			if m.cursor > 0 {
 				m.cursor--
+			} else {
+				m.cursor = len(m.themes) - 1
 			}
-
-		// The "down" and "j" keys move the cursor down
 		case "down", "j":
 			if m.cursor < len(m.themes)-1 {
 				m.cursor++
+			} else {
+				m.cursor = 0
 			}
-
-		// The "enter" key and the spacebar (a literal space) toggle
-		// the selected state for the item that the cursor is pointing at.
 		case "enter", " ":
 			m.selected = m.cursor
 
-			// This part Adds the file to the kitty.conf file and execute 'kitty @ load-config'
-			m.AddToConfig(m.themes[m.selected] + ".conf")
+			err := m.AddToConfig(m.themes[m.selected] + ".conf")
+			if err != nil {
+				log.Fatal(err)
+			}
+
 			cmd := exec.Command("kitty", "@", "load-config")
 			go cmd.Run()
 		}
 	}
-	// Return the updated model to the Bubble Tea runtime for processing.
-	// Note that we're not returning a command.
 	return m, nil
-}
-
-func OpenAndReadConfig(homeDir string) ([]string, error) {
-	file, err := os.Open(homeDir + "/.config/kitty/kitty.conf")
-	if err != nil {
-		return []string{}, err
-	}
-	defer file.Close()
-
-	var lines []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
-		return []string{}, err
-	}
-
-	return lines, nil
-}
-
-func (m model) AddToConfig(filename string) {
-	lines, err := OpenAndReadConfig(m.homeDir)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	lines[len(lines)-1] = "include ~/.config/kitty/" + filename
-	var buffer bytes.Buffer
-	for _, line := range lines {
-		buffer.WriteString(line + "\n")
-	}
-
-	err = os.WriteFile(m.homeDir+"/.config/kitty/kitty.conf", buffer.Bytes(), 0o644)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func (m model) View() string {
 	// The header
 	s := "What theme would you like?\n\n"
 
-	// Iterate over our choices
 	for i, theme := range m.themes {
-		// Is the cursor pointing at this choice?
 		cursor := " " // no cursor
 		if m.cursor == i {
 			cursor = ">" // cursor!
 		}
 
-		// Is this choice selected?
 		checked := " " // not selected
 		if i == m.selected {
 			checked = "x"

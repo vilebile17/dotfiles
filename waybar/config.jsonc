@@ -71,8 +71,8 @@
         "clock": {
                 "timezone": "Europe/London",
                 "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-                "format-alt": "󰸗  {:%d/%m}",
-                "format": "󰸗  {:%H:%M}"
+                "format-alt": "󰸗  {:%y-%m-%d}",
+                "format": "󰸗  {:%H:%M-%d}"
         },
         "backlight": {
                 "device": "intel_backlight",

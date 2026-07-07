@@ -130,7 +130,7 @@
                 // "bat-compatibility":
                 "events": {
                         "on-discharging-warning": "notify-send 'Battery Low (20%)' -i dialog-warning",
-                        "on-discharging-critical": "notify-send 'Blud needs to put the charger in... (10%)' -u critical -i dialog-warning",
+                        "on-discharging-critical": "notify-send 'Blud needs to put the charger in... (10%)' -u critical -i dialog-warning; mpv ~/Music/Sound_Effects/sad_violin.mp3",
                         "on-charging-100": "notify-send 'Battery Full (100%)' -i 'battery-100-charged'"
                 }
         },

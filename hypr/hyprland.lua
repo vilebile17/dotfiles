@@ -268,11 +268,14 @@ hl.bind(
 	mainMod .. " + M",
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
+
+hl.bind(mainMod .. " + U", hl.dsp.exec_cmd("kitty bash -c 'unipicker; exec bash'"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({}))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("swaync-client -t"))
 hl.bind(mainMod .. " + period", hl.dsp.exec_cmd("hypremoji"))
 
@@ -282,7 +285,6 @@ hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
 
-hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + print", hl.dsp.exec_cmd("hyprshot -m window"))
 hl.bind("print", hl.dsp.exec_cmd("hyprshot -m output"))
 hl.bind("SHIFT + print", hl.dsp.exec_cmd("hyprshot -m region"))
